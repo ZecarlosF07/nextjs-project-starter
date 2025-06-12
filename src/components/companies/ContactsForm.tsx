@@ -32,17 +32,22 @@ export function ContactsForm({
         name: "",
         type: "LEGAL" as const,
         position: "",
-        email: "",
-        dni: "",
-        phone: "",
-        birthDate: "",
+        email: null,
+        dni: null,
+        phone: null,
+        birthDate: null,
       },
     ])
   }
 
   const updateRepresentative = (index: number, field: keyof Representative, value: string) => {
     const newRepresentatives = [...representatives]
-    newRepresentatives[index] = { ...newRepresentatives[index], [field]: value }
+    // Handle special case for required fields which shouldn't be null
+    if (field === 'type' || field === 'name' || field === 'position') {
+      newRepresentatives[index] = { ...newRepresentatives[index], [field]: value }
+    } else {
+      newRepresentatives[index] = { ...newRepresentatives[index], [field]: value || null }
+    }
     onUpdateRepresentatives(newRepresentatives)
   }
 
@@ -56,8 +61,8 @@ export function ContactsForm({
       {
         name: "",
         position: "",
-        email: "",
-        phone: "",
+        email: null,
+        phone: null,
         area: "",
       },
     ])
@@ -65,7 +70,12 @@ export function ContactsForm({
 
   const updateAreaContact = (index: number, field: keyof AreaContact, value: string) => {
     const newAreaContacts = [...areaContacts]
-    newAreaContacts[index] = { ...newAreaContacts[index], [field]: value }
+    // Handle required fields that shouldn't be null
+    if (field === 'name' || field === 'position' || field === 'area') {
+      newAreaContacts[index] = { ...newAreaContacts[index], [field]: value }
+    } else {
+      newAreaContacts[index] = { ...newAreaContacts[index], [field]: value || null }
+    }
     onUpdateAreaContacts(newAreaContacts)
   }
 
